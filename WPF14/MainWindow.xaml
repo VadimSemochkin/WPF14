@@ -1,0 +1,51 @@
+﻿<Window x:Class="WPF14.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPF14"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <local:Converter x:Key="converter"/>
+        <DataTemplate x:Key="myTemplate">
+            <Border x:Name="border" BorderBrush="Blue" BorderThickness="2" Padding="5" Margin="5" >
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Название товара:"/>
+                    <TextBlock  Grid.Row="0" Grid.Column="1"  Text="{Binding Path=ProductName}"/>
+                    <TextBlock  Grid.Row="1" Grid.Column="0" Text="Цена товара:"/>
+                    <TextBlock  Grid.Row="1" Grid.Column="1" Text="{Binding Path=Price}"/>
+                    <Image Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Width="80" Height="80" Source="{Binding Path=Image, Converter={StaticResource converter}}"/>
+                    
+                </Grid>
+            </Border>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding Path=ProductType}">
+                    <DataTrigger.Value>
+                        <local:ProductTypes>Food</local:ProductTypes>
+                    </DataTrigger.Value>
+                    <Setter TargetName="border" Property="BorderBrush" Value="Red"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=ProductType}">
+                    <DataTrigger.Value>
+                        <local:ProductTypes>Toy</local:ProductTypes>
+                    </DataTrigger.Value>
+                    <Setter TargetName="border" Property="BorderBrush" Value="Green"/>
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+    </Window.Resources>
+    <StackPanel>
+        <TextBlock Name="productInfo" FontSize="20" Text="Информация о товаре:"/>
+        <ListBox Name="listBox" Margin="10" Padding="10" ItemTemplate="{StaticResource myTemplate}" HorizontalContentAlignment="Stretch"/>
+    </StackPanel>
+</Window>
